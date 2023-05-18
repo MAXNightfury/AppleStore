@@ -72,9 +72,7 @@ public class Main {
 		welcomeMenu();
 	}
 	
-	public static void main(String[] args) {
-		System.out.println("AppleStore에 오신 걸 환영합니다.");
-		welcomeMenu();
-	}
 
+		
 }	
+

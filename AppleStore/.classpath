@@ -6,10 +6,18 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="lib/commons-dbcp2-2.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-pool2-2.11.1.jar"/>
 	<classpathentry kind="lib" path="lib/ojdbc8-19.3.0.0.jar"/>
 	<classpathentry kind="lib" path="C:/dev/eGovFrameDev-3.10.0-64bit/eclipse/lombok.jar"/>
+=======
+	<classpathentry kind="lib" path="C:/dev/eGovFrameDev-3.10.0-64bit/eclipse/lombok.jar"/>
+	<classpathentry kind="lib" path="lib/._commons-dbcp2-2.9.0.jar"/>
+	<classpathentry kind="lib" path="lib/._commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/._commons-pool2-2.11.1.jar"/>
+	<classpathentry kind="lib" path="lib/._ojdbc8-19.3.0.0.jar"/>
+>>>>>>> refs/remotes/apple/main
 	<classpathentry kind="output" path="bin"/>
 </classpath>
