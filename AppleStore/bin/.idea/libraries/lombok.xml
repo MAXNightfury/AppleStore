@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lombok">
+    <CLASSES>
+      <root url="jar:///Applications/eGovFrameDev-3.10.0-Mac-64bit.app/Contents/Eclipse/lombok.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-dbcp2-2.9.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-logging-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-pool2-2.11.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/ojdbc8-19.3.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,4 +1,4 @@
-package vo;
+package src.vo;
 
 import lombok.Data;
 import lombok.Getter;
@@ -14,6 +14,6 @@ public class CustomerOrderVO {
 	private String customerId;
 	private Date orderUpdateDate;
 	private Date orderEndDate;
-	private String statusId;
+	private String orderStatusId;
 
 }

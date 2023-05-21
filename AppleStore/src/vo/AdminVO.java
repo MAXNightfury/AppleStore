@@ -1,4 +1,4 @@
-package vo;
+package src.vo;
 
 import lombok.Data;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AdminVO {
-	private String id;
-	private String password;
+	private String adminId;
+	private String adminPassword;
 
 }

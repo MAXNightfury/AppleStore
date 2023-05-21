@@ -1,4 +1,4 @@
-package vo;
+package src.vo;
 
 import java.sql.Date;
 
@@ -12,11 +12,12 @@ import lombok.Setter;
 public class ProductVO {
 private int productId;
 private String productName;
-private int price;
+private int productPrice;
 private Date productInputDate;
 private Date productUpdateDate;
-private Date producDeleteDate;
+private Date productDeleteDate;
 private String productImage;
 private int categoryId;
+private int productCount;
 
 }

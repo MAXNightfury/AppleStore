@@ -1,78 +1,140 @@
+package src;
+
+import src.dao.CustomerDAO;
+import src.service.BasketService;
+import src.service.CustomerOrderService;
+import src.service.CustomerService;
+import src.service.ProductCategoryService;
+import src.vo.CustomerVO;
+
+import java.sql.Date;
 import java.util.Scanner;
 
+
 public class Main {
-	static Scanner scanner = new Scanner(System.in);
-	static String id = null;
-	static String password = null;
-	static boolean isCustomer = false;
-	static boolean isAdmin = false;
-	
-	public static void welcomeMenu() {
-		System.out.println("-------------------");
-		System.out.println("1. 로그인 | 2. 회원가입");
-		System.out.println("-------------------");
-		System.out.print("메뉴 : ");
-		int menu = scanner.nextInt();
-		scanner.nextLine();
-		switch (menu) {
-		case 1 : login(); break;
-		case 2 : join(); break;
-		default:
-			break;
-		}
-	}
-	
-	public static void customerMenu() {
-		System.out.println("---------------------------------------------");
-		System.out.println("1.제품보기 | 2.장바구니 | 3.주문확인 | 4.회원관리 | 5.로그아웃");
-		System.out.println("---------------------------------------------");
-		System.out.print("메뉴 : ");
-		int menu = scanner.nextInt();
-		scanner.nextLine();
-		switch (menu) {
-		case 1: 
-			
-			break;
 
-		default:
-			break;
-		}
-	}
-	
-	public static void adminMenu() {
-		System.out.println("---------------------------------------------");
-		System.out.println("1.상품관리 | 2.주문관리 | 3.회원관리 | 4.로그아웃");
-		System.out.println("---------------------------------------------");
-	
-		
-	}
-	
-	public static void login() {
-		System.out.print("ID : ");
-		id = scanner.nextLine();
-		System.out.println("Password : ");
-		password=scanner.nextLine();
-		
-		/*
-		 * 고객이 로그인 성공시 isCustomer = True;
-		 * 관리자 로그인 성공시 isAdmin = True;
-		 */
-		if (isCustomer) {
-			customerMenu();
-		} else if (isAdmin) {
-			adminMenu();
-		}
-	}
-	
-	public static void join() {
-		/*
-		 * 회원가입
-		 */
-		
-		welcomeMenu();
-	}
-	
+    static Scanner scanner = new Scanner(System.in);
 
-		
-}	
+    // g해수 -----------------------------------------
+    // customer --------------------------------------
+    public void customerJoin() {
+        CustomerService customerService = new CustomerService(); // TODO 이렇게 매번 객체를 새로 생성하는게 맞나?
+        customerService.customerJoin();
+    }
 
+    public void customerLogin() {
+        CustomerService customerService = new CustomerService();
+        customerService.customerLogin();
+    }
+
+    public void cunstomerPasswordUpdate() {
+        CustomerVO customerVO = new CustomerVO();
+        CustomerService customerService = new CustomerService();
+        // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
+        customerVO.setCustomerId("test");
+        customerService.customerUpdatePassword(customerVO);
+    }
+
+//    public void checkCustomerPassword(){ 체크는 메인에서 안 해 서비스에서 해
+//        CustomerService customerService =new CustomerService();
+//        customerService.checkCustomerPassword();
+//    }
+
+    public void customerNameUpdate() {
+        CustomerVO customerVO = new CustomerVO();
+        CustomerService customerService = new CustomerService();
+        // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
+        customerVO.setCustomerId("test");
+        customerService.customerUpdateName(customerVO);
+    }
+
+    public void customerPhoneNumberUpdate() {
+        CustomerVO customerVO = new CustomerVO();
+        CustomerService customerService = new CustomerService();
+        // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
+        customerVO.setCustomerId("test");
+        customerService.customerUpdatePhoneNumber(customerVO);
+    }
+
+    public void customerUpdateAddress() {
+        CustomerVO customerVO = new CustomerVO();
+        CustomerService customerService = new CustomerService();
+        // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
+        customerVO.setCustomerId("test");
+        customerService.customerUpdateAddress(customerVO);
+    }
+
+    public void customerDelete() {
+        CustomerVO customerVO = new CustomerVO();
+        CustomerService customerService = new CustomerService();
+        // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
+        customerVO.setCustomerId("test");
+        customerService.customerDelete(customerVO);
+    }
+    // customer end--------------------------------------
+
+    // productCategory --------------------------------------
+    public void insertProductCategory() {
+        ProductCategoryService productCategoryService = new ProductCategoryService();
+        productCategoryService.insertProductCategory();
+    }
+
+    public static void selectAllProductCategory() {
+        ProductCategoryService productCategoryService = new ProductCategoryService();
+        productCategoryService.selectAllProductCategory();
+    }
+
+    public void updateProductCategory() {
+        ProductCategoryService productCategoryService = new ProductCategoryService();
+        productCategoryService.updateProductCategory();
+    }
+
+    public void deleteProductCategory() {
+        ProductCategoryService productCategoryService = new ProductCategoryService();
+        productCategoryService.deleteProductCategory();
+    }
+    // productCategory end --------------------------------------
+
+
+    // basket ---------------------------------
+    public void insertBasket() {
+        CustomerVO customerVO = new CustomerVO();
+        BasketService basketService = new BasketService();
+        // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
+        customerVO.setCustomerId("test");
+        basketService.insertBasket(customerVO);
+    }
+    public static void selectBasket() {
+        CustomerVO customerVO = new CustomerVO();
+        BasketService basketService = new BasketService();
+        // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
+        customerVO.setCustomerId("test");
+        basketService.selectBasket(customerVO);
+    }
+    public static void updateBasket() {
+        BasketService basketService = new BasketService();
+        basketService.updateBasket();
+    }
+
+    public static void deleteBasket() {
+        BasketService basketService = new BasketService();
+        basketService.deleteBasket();
+    }
+
+    // basket end ---------------------------------
+
+    // customerOrder -------------------------------------------
+    public static void insertCustomerOrder() {
+        CustomerVO customerVO = new CustomerVO();
+        CustomerOrderService customerOrderService = new CustomerOrderService();
+        // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
+        customerVO.setCustomerId("test"); // 지금 이 유저는 로그인만 막아놔서 다른건 수정 가능함
+        customerOrderService.insertCustomerOrder(customerVO);
+    }
+
+    // customerOrder end -------------------------------------------
+    public static void main(String[] args) {
+        selectBasket();
+    }
+
+}

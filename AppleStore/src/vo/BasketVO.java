@@ -1,4 +1,4 @@
-package vo;
+package src.vo;
 
 import lombok.Data;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class BasketVO {
 	private int basketId;
-	private int count;
+	private int basketProductCount;
 	private String customerId;
 	private int productId;
 
