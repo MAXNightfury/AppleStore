@@ -1,4 +1,4 @@
-package vo;
+package src.vo;
 
 import lombok.Data;
 import lombok.Getter;
@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderStatusVO {
-private String statusId;
+private String orderStatusId;
 }

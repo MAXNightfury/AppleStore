@@ -1,4 +1,4 @@
-package vo;
+package src.vo;
 
 
 import lombok.Data;
@@ -11,6 +11,6 @@ import lombok.Setter;
 public class OrderDetailVO {
 private int orderId; 
 private int productId;
-private int count;
+private int orderDetailProductCount;
 
 }

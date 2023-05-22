@@ -1,4 +1,4 @@
-package vo;
+package src.vo;
 import java.sql.Date;
 import lombok.Data;
 import lombok.Getter;
