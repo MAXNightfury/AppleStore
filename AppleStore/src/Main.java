@@ -134,7 +134,7 @@ public class Main {
 
     // customerOrder end -------------------------------------------
     public static void main(String[] args) {
-        selectBasket();
+        insertCustomerOrder();
     }
 
 }

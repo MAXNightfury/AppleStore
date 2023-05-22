@@ -10,10 +10,11 @@ import java.sql.Date;
 @Setter
 public class CustomerOrderVO {
 	private int orderId;
-	private Date orderDate;
 	private String customerId;
+	private Date orderInputDate;
 	private Date orderUpdateDate;
 	private Date orderEndDate;
+	private Date orderDeleteDate;
 	private String orderStatusId;
 
 }
