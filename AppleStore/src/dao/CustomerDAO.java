@@ -12,7 +12,6 @@ public class CustomerDAO implements ICustomerDAO {
     static boolean isConfirmedPassword = false;
 
 
-
     public CustomerVO customerLogin(CustomerVO customerVO) {
         int count = 0;
         String sql = "select customer_id, customer_delete_date from customer where customer_id = ? and customer_password=?";
@@ -34,7 +33,7 @@ public class CustomerDAO implements ICustomerDAO {
                 customerVO.setCustomerId(rs.getString("customer_id"));
                 customerVO.setCustomerDeleteDate(rs.getDate("customer_delete_date"));
                 return customerVO;
-            }else{
+            } else {
                 return null;
             }
         } catch (SQLException e) {
@@ -49,10 +48,7 @@ public class CustomerDAO implements ICustomerDAO {
                 }
             AppleStoreDataSource.closeConnection(connection);
         }
-
-
     }
-
 
     public int customerJoin(CustomerVO customerVO) {
         int count = 0;
@@ -83,7 +79,6 @@ public class CustomerDAO implements ICustomerDAO {
                 try {
                     pstmt.close();
                 } catch (Exception e) {
-
                 }
             AppleStoreDataSource.closeConnection(connection);
         }

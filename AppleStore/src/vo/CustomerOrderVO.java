@@ -17,5 +17,8 @@ public class CustomerOrderVO {
 	private Date orderEndDate;
 	private Date orderDeleteDate;
 	private String orderStatusId;
+	private int productId;
+	private int orderProductCount;
+	private int orderBundleId;
 
 }
