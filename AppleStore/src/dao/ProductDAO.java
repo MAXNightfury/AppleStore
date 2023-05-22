@@ -316,13 +316,8 @@ public class ProductDAO implements IProductDAO {
 
     @Override
     public int updateProductCountIncrease(CustomerOrderVO customerOrderVO) { // TODO 수정
-        String sql = "update product set" +
-                "product_count = product_count + " +
-                "(select od.order_detail_product_count" +
-                "from order_detail od" +
-                "join customer_order co on od.order_id = co.order_id" +
-                "where co.order_id = ?) " +
-                "product_update_date = systimestamp";
+        String sql = "update product set product_count = product_count+( select order_product_count from customer_order where order_id= ? ) " +
+                "where product_id=( select product_id from customer_order where order_id= ? )";
         int rowCount = 0;
         Connection connection = null;
         PreparedStatement pstmt = null;
@@ -330,6 +325,7 @@ public class ProductDAO implements IProductDAO {
             connection = AppleStoreDataSource.getConnection();
             pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, customerOrderVO.getOrderId());
+            pstmt.setInt(2, customerOrderVO.getOrderId());
             rowCount = pstmt.executeUpdate();
         } catch (SQLException e) {
             AppleStoreDataSource.closeConnection(connection);
@@ -345,24 +341,20 @@ public class ProductDAO implements IProductDAO {
     }
 
     @Override
-    public int updateProductCountDecrease(BasketVO basketVO) { //TODO 수정
-        String sql = "update product set product_count = product_count-(" +
-                "select basket_product_count " +
-                "from basket " +
-                "where basket_id=?) " +
-                "where product_id=(" +
-                "select product_id " +
-                "from basket " +
-                "where basket_id=? " +
-                ")";
+    public int updateProductCountDecrease(BasketVO basketVO) {
         int rowCount = 0;
+        String sql = "update product set product_count = product_count-( select basket_product_count from basket where basket_id= ? ) " + // 니 왜 안돌아가
+                "where product_id=( select product_id from basket where basket_id= ? )";
+
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
             connection = AppleStoreDataSource.getConnection();
             pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, basketVO.getBasketId());
-            pstmt.setInt(2, basketVO.getBasketId());
+           int basketId= basketVO.getBasketId();
+           System.out.println(basketId);
+            pstmt.setInt(1,basketId);
+            pstmt.setInt(2, basketId);
             rowCount = pstmt.executeUpdate();
         } catch (SQLException e) {
             // runtimeException예외 던져라
@@ -375,6 +367,7 @@ public class ProductDAO implements IProductDAO {
                 }
             AppleStoreDataSource.closeConnection(connection);
         }
+        System.out.println("rowCount "+rowCount);
         return rowCount;
     }
 

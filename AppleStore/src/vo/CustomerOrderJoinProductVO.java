@@ -12,8 +12,10 @@ import java.sql.Date;
 public class CustomerOrderJoinProductVO {
 
     private int orderBundleId;
+    private int orderId;
     private Date orderInputDate;
     private String productName;
     private int orderProductCount;
     private int productPrice;
+    private String orderStatusId;
 }
