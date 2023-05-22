@@ -16,20 +16,22 @@ import src.vo.CustomerOrderVO;
 import src.vo.CustomerVO;
 
 
-public class CustomerOrderDAO implements ICustomerOrderDAO { // 이거하고있어
+public class CustomerOrderDAO implements ICustomerOrderDAO {
     @Override
-    public int insertCustomerOrder(CustomerVO customerVO) {
+    public int insertCustomerOrder(CustomerVO customerVO, BasketVO basketVO) {
         int rowCount = 0;
-        String sql = "insert into customer_order (order_id,customer_id, order_input_date, order_status_id) values(applestore_seq.nextval, ?, systimestamp, ?) " ;
+        String sql = "insert into customer_order (order_id,customer_id, basket_id,order_input_date, order_status_id) values(applestore_seq.nextval, ?,?, systimestamp, ?) " ;
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
             connection = AppleStoreDataSource.getConnection();
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, customerVO.getCustomerId());
-            pstmt.setString(2, "결제대기");
+            pstmt.setInt(2,basketVO.getBasketId() );
+            pstmt.setString(3, "결제대기");
 
             rowCount = pstmt.executeUpdate();
+
         } catch (SQLException e) {
             // runtimeException예외를 던저라
             throw new RuntimeException(e);
@@ -44,13 +46,9 @@ public class CustomerOrderDAO implements ICustomerOrderDAO { // 이거하고있�
         }
         return rowCount;
     }
-    @Override
-    public int insertOrderDetail(CustomerVO customerVO, BasketVO basketVO){
 
-        return 0;
-    }
     @Override
-    public int selectCustomerOrderId(String customerId) {
+    public int selectCustomerOrderId(String customerId) { // 날려?
         String sql = "select co.order_id, co.customer_id, bs.product_id, bs.count"
                 + "from customer_order co"
                 + "join order_detail od on co.order_id = od.order_id"
@@ -77,7 +75,7 @@ public class CustomerOrderDAO implements ICustomerOrderDAO { // 이거하고있�
     }
 
     @Override
-    public void selectCustomerOrder(String customerId) {
+    public void selectCustomerOrder(String customerId) {// 이거하고있어
         int sum = 0;
         ResultSet rs = null;
         Connection connection = null;

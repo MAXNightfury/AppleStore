@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class Main {
 
     static Scanner scanner = new Scanner(System.in);
+    static CustomerVO customerVO =null;
 
     // g해수 -----------------------------------------
     // customer --------------------------------------
@@ -28,7 +29,6 @@ public class Main {
     }
 
     public void cunstomerPasswordUpdate() {
-        CustomerVO customerVO = new CustomerVO();
         CustomerService customerService = new CustomerService();
         // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
         customerVO.setCustomerId("test");
@@ -41,7 +41,6 @@ public class Main {
 //    }
 
     public void customerNameUpdate() {
-        CustomerVO customerVO = new CustomerVO();
         CustomerService customerService = new CustomerService();
         // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
         customerVO.setCustomerId("test");
@@ -49,7 +48,6 @@ public class Main {
     }
 
     public void customerPhoneNumberUpdate() {
-        CustomerVO customerVO = new CustomerVO();
         CustomerService customerService = new CustomerService();
         // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
         customerVO.setCustomerId("test");
@@ -57,7 +55,6 @@ public class Main {
     }
 
     public void customerUpdateAddress() {
-        CustomerVO customerVO = new CustomerVO();
         CustomerService customerService = new CustomerService();
         // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
         customerVO.setCustomerId("test");
@@ -65,7 +62,6 @@ public class Main {
     }
 
     public void customerDelete() {
-        CustomerVO customerVO = new CustomerVO();
         CustomerService customerService = new CustomerService();
         // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
         customerVO.setCustomerId("test");
@@ -98,14 +94,12 @@ public class Main {
 
     // basket ---------------------------------
     public void insertBasket() {
-        CustomerVO customerVO = new CustomerVO();
         BasketService basketService = new BasketService();
         // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
-        customerVO.setCustomerId("test");
+
         basketService.insertBasket(customerVO);
     }
     public static void selectBasket() {
-        CustomerVO customerVO = new CustomerVO();
         BasketService basketService = new BasketService();
         // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
         customerVO.setCustomerId("test");
