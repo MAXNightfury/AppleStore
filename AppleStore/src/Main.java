@@ -132,9 +132,16 @@ public class Main {
         customerVO.setCustomerId("test");
         customerOrderService.selectCustomerOrder(customerVO);
     }
+    public static void  deleteCustomerOrder(){
+        CustomerVO customerVO = new CustomerVO();
+        CustomerOrderService customerOrderService = new CustomerOrderService();
+        customerVO.setCustomerId("test");
+        customerOrderService.deleteCustomerOrder(customerVO);
+    }
+
     // customerOrder end -------------------------------------------
     public static void main(String[] args) {
-        insertCustomerOrder();
+        deleteCustomerOrder();
     }
 
 }
