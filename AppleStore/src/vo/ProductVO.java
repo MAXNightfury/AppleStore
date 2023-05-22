@@ -10,14 +10,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductVO {
-private int productId;
-private String productName;
-private int productPrice;
-private Date productInputDate;
-private Date productUpdateDate;
-private Date productDeleteDate;
-private String productImage;
-private int categoryId;
-private int productCount;
+    private int productId;
+    private int categoryId;
+    private String productName;
+    private int productPrice;
+    private Date productInputDate;
+    private Date productUpdateDate;
+    private Date productDeleteDate;
+    private String productImage;
+    private int productCount;
 
 }

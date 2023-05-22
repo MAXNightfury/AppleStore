@@ -36,7 +36,7 @@ public class CustomerService {
                 System.out.println("로그인에 성공했습니다.");
             } else {
                 isCustomerLogin = false;
-                System.out.println("로그인에 실패했습니다.");
+                System.out.println("로그인에 실패했습니다."); //TODO 로직 뭐 하나 없앨 수 있지 않아? 조건을 좀 줄일 수 있지 않아?
             }
         }else{
             System.out.println("로그인에 실패했습니다.");
@@ -113,7 +113,7 @@ public class CustomerService {
         } else {
             System.out.println("기존 비밀번호가 일치하지 않습니다.");
             System.exit(0);
-            // sys 다운? 아니면 3번까지 다시 받기 ?
+            // TODO sys 다운? 아니면 3번까지 다시 받기 ?
         }
         isConfirmedPassword = false;
     }
