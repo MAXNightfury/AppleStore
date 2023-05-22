@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class Main {
 
     static Scanner scanner = new Scanner(System.in);
-    static CustomerVO customerVO =null;
+    static CustomerVO customerVO =new CustomerVO();
 
     // g해수 -----------------------------------------
     // customer --------------------------------------
@@ -93,17 +93,18 @@ public class Main {
 
 
     // basket ---------------------------------
-    public void insertBasket() {
+    public static void insertBasket() {
         BasketService basketService = new BasketService();
+        customerVO.setCustomerId("test");
         // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
 
         basketService.insertBasket(customerVO);
     }
-    public static void selectBasket() {
+    public static void selectBaskets() {
         BasketService basketService = new BasketService();
         // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
         customerVO.setCustomerId("test");
-        basketService.selectBasket(customerVO);
+        basketService.selectBaskets(customerVO);
     }
     public static void updateBasket() {
         BasketService basketService = new BasketService();
@@ -122,10 +123,15 @@ public class Main {
         CustomerVO customerVO = new CustomerVO();
         CustomerOrderService customerOrderService = new CustomerOrderService();
         // 로그인 했을 때 고객 아이디를 전역으로 저장하고 있어야 함
-        customerVO.setCustomerId("test"); // 지금 이 유저는 로그인만 막아놔서 다른건 수정 가능함
+        customerVO.setCustomerId("test");
         customerOrderService.insertCustomerOrder(customerVO);
     }
-
+    public static void selectCustomerOrder() {
+        CustomerVO customerVO = new CustomerVO();
+        CustomerOrderService customerOrderService = new CustomerOrderService();
+        customerVO.setCustomerId("test");
+        customerOrderService.selectCustomerOrder(customerVO);
+    }
     // customerOrder end -------------------------------------------
     public static void main(String[] args) {
         insertCustomerOrder();

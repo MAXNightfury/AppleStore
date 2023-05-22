@@ -27,10 +27,15 @@ public class BasketService {
         basketDAO.insertBasket(customerVO, basketVO);
     }
 
-    public void selectBasket(CustomerVO customerVO) {
-        basketDAO.selectBasket(customerVO);
+    public void selectBaskets(CustomerVO customerVO) {
+        basketDAO.selectBaskets(customerVO);
     }
 
+    public BasketVO selectOneBasket(BasketVO basketVO) {
+        // vo 에 basketId set 된 상태여야해
+        basketVO=basketDAO.selectOneBasket(basketVO);
+        return basketVO;
+    }
     public void updateBasket() {
         System.out.print("수정할 ID를 입력해주세요 > ");
         int basketId = scanner.nextInt();
