@@ -6,14 +6,15 @@ import src.vo.CustomerVO;
 import java.sql.Date;
 import java.util.Scanner;
 
-public class CustomerService {
+public class CustomerService implements ICustomerService {
     static Scanner scanner = new Scanner(System.in);
     static CustomerDAO customerDAO = new CustomerDAO(); //TODO static으로  올려 놓는게 맞나..? user id 는 이렇게 갖고 있어야 하는게 맞나?
     static boolean isCustomerLogin = false;
+//TODO 회원 로그아웃 구현해야함
+    @Override
     public void customerLogin() {
         String inputCustomerId;
         String inputCustomerPassword;
-
         System.out.println("[ 로그인 ]");
         System.out.print("아이디: >");
         inputCustomerId = scanner.nextLine();
@@ -27,7 +28,7 @@ public class CustomerService {
         CustomerVO customerVOrealData = null;
         customerVOrealData = customerDAO.customerLogin(customerVO);
 
-        if(customerVOrealData !=null) {
+        if (customerVOrealData != null) {
             if (customerVOrealData.getCustomerDeleteDate() != null) { // 값이 있으면 로그인 실패
                 isCustomerLogin = false;
                 System.out.println("로그인에 실패했습니다.");
@@ -38,11 +39,12 @@ public class CustomerService {
                 isCustomerLogin = false;
                 System.out.println("로그인에 실패했습니다."); //TODO 로직 뭐 하나 없앨 수 있지 않아? 조건을 좀 줄일 수 있지 않아?
             }
-        }else{
+        } else {
             System.out.println("로그인에 실패했습니다.");
         }
     }
 
+    @Override
     public void customerJoin() {
         int count = 0;
         String customerId;
@@ -87,7 +89,7 @@ public class CustomerService {
         customerVO.setCustomerSex(customerSex);
 
         count = customerDAO.customerJoin(customerVO);
-        System.out.println(customerVO.toString());
+//        System.out.println(customerVO.toString());
 
         if (count == 0) {
             System.out.println("회원가입이 완료되었습니다.");
@@ -99,30 +101,34 @@ public class CustomerService {
 
     }
 
-    public void checkCustomerPassword(CustomerVO customerVO) {
+    @Override
+    public boolean checkCustomerPassword(CustomerVO customerVO) {
         String customerPassword;
-        boolean isConfirmedPassword;
+        boolean isConfirmedPassword = false;
         System.out.print("기존 비밀번호를 입력해주세요> ");
         customerPassword = scanner.nextLine();
+//        String inputCustomerId=customerVO.getCustomerId();
+        String inputCustomerPassword=customerPassword;
         customerVO.setCustomerPassword(customerPassword);
-        isConfirmedPassword = customerDAO.checkCustomerPassword(customerVO);
+        customerVO = customerDAO.checkCustomerPassword(customerVO);
+//        String selectCustomerId = customerVO.getCustomerId();
+        String selectCustomerPassword =customerVO.getCustomerPassword();
 
-        if (isConfirmedPassword == true) {
+        if (inputCustomerPassword == selectCustomerPassword) {
             System.out.println("기존 비밀번호를 확인했습니다.");
-
+            isConfirmedPassword=true;
         } else {
             System.out.println("기존 비밀번호가 일치하지 않습니다.");
             System.exit(0);
             // TODO sys 다운? 아니면 3번까지 다시 받기 ?
         }
-        isConfirmedPassword = false;
+        return isConfirmedPassword;
     }
 
+    @Override
     public void customerUpdatePassword(CustomerVO customerVO) {
         int count = 0;
         System.out.println("비밀번호를 변경합니다.");
-        //checkCustomerPassword 호출할때 ID 가주가야하는데
-        // 아이디를 파라미터가 가지고 있는 상태임
         checkCustomerPassword(customerVO);
 
         String newPassword;
@@ -139,14 +145,11 @@ public class CustomerService {
 
     }
 
-
+    @Override
     public void customerUpdateName(CustomerVO customerVO) {
         int count = 0;
         System.out.println("이름을 변경합니다.");
-        //checkCustomerPassword 호출할때 ID 가주가야하는데
-        // 아이디를 파라미터가 가지고 있는 상태임
         checkCustomerPassword(customerVO);
-
 
         String newCsutomerName;
         System.out.print("새 이름을 입력해주세요> ");
@@ -161,12 +164,10 @@ public class CustomerService {
         }
     }
 
-
+    @Override
     public void customerUpdatePhoneNumber(CustomerVO customerVO) {
         int count = 0;
         System.out.println("전화번호를 변경합니다.");
-        //checkCustomerPassword 호출할때 ID 가주가야하는데
-        // 아이디를 파라미터가 가지고 있는 상태임
         checkCustomerPassword(customerVO);
 
         int newCsutomerPhoneNumber;
@@ -184,11 +185,10 @@ public class CustomerService {
         }
     }
 
+    @Override
     public void customerUpdateAddress(CustomerVO customerVO) {
         int count = 0;
         System.out.println("주소를 변경합니다.");
-        //checkCustomerPassword 호출할때 ID 가주가야하는데
-        // 아이디를 파라미터가 가지고 있는 상태임
         checkCustomerPassword(customerVO);
 
         String newCsutomerAddress;
@@ -206,11 +206,10 @@ public class CustomerService {
         }
     }
 
-    public void customerDelete(CustomerVO customerVO) { // delete 쿼리를 날리는게 아니라 delete-date 에 timestamp 삽입
+    @Override
+    public void customerDelete(CustomerVO customerVO) {
         int count = 0;
         System.out.println("회원탈퇴를 진행하시겠습니까?");
-        //checkCustomerPassword 호출할때 ID 가주가야하는데
-        // 아이디를 파라미터가 가지고 있는 상태임
         checkCustomerPassword(customerVO);
         count = customerDAO.customerDelete(customerVO);
 
@@ -220,6 +219,5 @@ public class CustomerService {
             System.out.println("탈퇴 처리가 실패되었습니다.");
         }
     }
-
 
 }

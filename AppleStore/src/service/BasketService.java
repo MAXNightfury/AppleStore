@@ -3,7 +3,6 @@ package src.service;
 import src.dao.BasketDAO;
 import src.vo.BasketVO;
 import src.vo.CustomerVO;
-import src.vo.IBasketService;
 
 import java.util.Scanner;
 
@@ -42,7 +41,6 @@ public class BasketService implements IBasketService {
 
     @Override
     public BasketVO selectOneBasket(BasketVO basketVO) {
-        // vo 에 basketId set 된 상태여야해
         basketVO = basketDAO.selectOneBasket(basketVO);
         return basketVO;
     }

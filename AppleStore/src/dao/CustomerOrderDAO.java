@@ -22,13 +22,12 @@ public class CustomerOrderDAO implements ICustomerOrderDAO {
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, customerVO.getCustomerId());
             pstmt.setString(2, "결제대기");
-            pstmt.setInt(3,basketVO.getProductId()); // product_id
-            pstmt.setInt(4,basketVO.getBasketProductCount()); // order_product_count
-            pstmt.setInt(5,orderBundleId);
+            pstmt.setInt(3, basketVO.getProductId()); // product_id
+            pstmt.setInt(4, basketVO.getBasketProductCount()); // order_product_count
+            pstmt.setInt(5, orderBundleId);
             rowCount = pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            // runtimeException예외를 던저라
             throw new RuntimeException(e);
         } finally {
             if (pstmt != null)
@@ -45,7 +44,6 @@ public class CustomerOrderDAO implements ICustomerOrderDAO {
 
     @Override
     public ArrayList<CustomerOrderJoinProductVO> selectCustomerOrder(CustomerVO customerVO) {// 이거하고있어 유저가 자기 주문만 출력하는 거
-        int sum = 0;
         ArrayList<CustomerOrderJoinProductVO> orderArr = new ArrayList<CustomerOrderJoinProductVO>();
 
         ResultSet rs = null;
@@ -80,6 +78,7 @@ public class CustomerOrderDAO implements ICustomerOrderDAO {
         return orderArr;
     }
 
+    @Override
     public ArrayList<CustomerOrderJoinProductVO> selectCustomerOrderByCustomerIdCanDelete(CustomerVO customerVO) {
 
         ArrayList<CustomerOrderJoinProductVO> orderArr = new ArrayList<CustomerOrderJoinProductVO>();
@@ -120,6 +119,8 @@ public class CustomerOrderDAO implements ICustomerOrderDAO {
         }
         return orderArr;
     }
+
+    @Override
     public ArrayList<CustomerOrderJoinProductVO> selectCustomerOrderIdByBundleIdCanDelete(CustomerOrderVO customerOrderVO) {// 번들 아이디 가지고 order_id 찾기
 
         ArrayList<CustomerOrderJoinProductVO> orderArr = new ArrayList<CustomerOrderJoinProductVO>();
@@ -150,6 +151,7 @@ public class CustomerOrderDAO implements ICustomerOrderDAO {
         }
         return orderArr;
     }
+
     @Override
     public int deleteCustomerOrder(CustomerOrderVO customerOrderVO) {
         int rowCount = 0;
@@ -162,7 +164,7 @@ public class CustomerOrderDAO implements ICustomerOrderDAO {
             pstmt = connection.prepareStatement(sql);
             pstmt.setString(1, "주문취소");
             pstmt.setInt(2, customerOrderVO.getOrderBundleId());
-            rowCount=pstmt.executeUpdate();
+            rowCount = pstmt.executeUpdate();
 
         } catch (SQLException e) {
             // runtimeException예외를 던저라

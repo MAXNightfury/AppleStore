@@ -11,10 +11,8 @@ import java.sql.Date;
 public class CustomerOrderVO {
 	private int orderId;
 	private String customerId;
-	private int basketId;
 	private Date orderInputDate;
 	private Date orderUpdateDate;
-	private Date orderEndDate;
 	private Date orderDeleteDate;
 	private String orderStatusId;
 	private int productId;

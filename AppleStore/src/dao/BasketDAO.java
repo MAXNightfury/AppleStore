@@ -40,7 +40,6 @@ public class BasketDAO implements IBasketDAO {
 
     @Override
     public void selectBaskets(CustomerVO customerVO) {
-        ResultSet rs = null;
         String sql = "select b.basket_id, b.basket_product_count, p.product_name, p.product_price "
                 + "from basket b "
                 + "left join product p "
@@ -48,6 +47,7 @@ public class BasketDAO implements IBasketDAO {
                 + "where b.customer_id = ?";
         Connection connection = null;
         PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
         try {
             connection = AppleStoreDataSource.getConnection();
@@ -143,7 +143,7 @@ public class BasketDAO implements IBasketDAO {
     }
 
     @Override
-    public int deleteBasket(BasketVO basketVO) { //TODO 선택 삭제, 전체 삭제 구현 해야함
+    public int deleteBasket(BasketVO basketVO) {
         int rowCount = 0;
         String sql = "delete from basket where basket_id=?";
         Connection connection = null;
@@ -183,7 +183,6 @@ public class BasketDAO implements IBasketDAO {
             rowCount = pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            // runtimeException예외를 던저라
             throw new RuntimeException(e);
         } finally {
             if (pstmt != null)

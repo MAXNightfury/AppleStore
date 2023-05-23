@@ -1,4 +1,7 @@
-package src.vo;
+package src.service;
+
+import src.vo.BasketVO;
+import src.vo.CustomerVO;
 
 public interface IBasketService {
     public void insertBasket(CustomerVO customerVO);

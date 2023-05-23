@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class ProductCategoryDAO implements IProductCategoryDAO {
     @Override
     public void insertProductCategory(ProductCategoryVO productCategoryVO) {
-        String sql = "  insert into product_category (CATEGORY_ID, CATEGORY_NAME, CATEGORY_INPUT_DATE) values(applestore_seq.nextval, ?,systimestamp )";
+        String sql = "insert into product_category (CATEGORY_ID, CATEGORY_NAME, CATEGORY_INPUT_DATE) values(applestore_seq.nextval, ?,systimestamp )";
 
         Connection connection = null;
         PreparedStatement pstmt = null;
@@ -32,6 +32,7 @@ public class ProductCategoryDAO implements IProductCategoryDAO {
             AppleStoreDataSource.closeConnection(connection);
         }
     }
+
     @Override
     public ArrayList<ProductCategoryVO> selectAllProductCategory() {
         ArrayList<ProductCategoryVO> productCategoryList = new ArrayList<ProductCategoryVO>();
@@ -51,7 +52,6 @@ public class ProductCategoryDAO implements IProductCategoryDAO {
                 productCategoryList.add(productCategoryVO);
             }
         } catch (SQLException e) {
-            // runtimeException예외를 던저라
             throw new RuntimeException(e);
         } finally {
             if (rs != null)
@@ -71,6 +71,7 @@ public class ProductCategoryDAO implements IProductCategoryDAO {
 
         return productCategoryList;
     }
+
     @Override
     public ArrayList<String> getAllColumnNamesProductCategory() {
         ArrayList<String> columnNames = new ArrayList<String>();
@@ -90,10 +91,9 @@ public class ProductCategoryDAO implements IProductCategoryDAO {
             }
 
         } catch (SQLException e) {
-            // runtimeException예외를 던저라
             throw new RuntimeException(e);
         } finally {
-            if (rs != null) // 연 반대 순서로 닫는다.
+            if (rs != null)
                 try {
                     rs.close();
                 } catch (Exception e) {
@@ -109,8 +109,7 @@ public class ProductCategoryDAO implements IProductCategoryDAO {
         }
 
         return columnNames;
-    } // getAllColumnNames end
-
+    }
     @Override
     public int updateProductCategory(ProductCategoryVO productCategoryVO) {
         int count = 0;
@@ -146,7 +145,6 @@ public class ProductCategoryDAO implements IProductCategoryDAO {
     @Override
     public int deleteProductCategory(ProductCategoryVO productCategoryVO) {
         int count = 0;
-        // 삭제 날짜만 박으면 됨
         String sql = "  update product_category set category_delete_date =systimestamp where category_id=?";
         Connection connection = null;
         PreparedStatement pstmt = null;
@@ -157,7 +155,6 @@ public class ProductCategoryDAO implements IProductCategoryDAO {
             count = pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            // runtimeException예외를 던저라
             throw new RuntimeException(e);
         } finally {
             if (pstmt != null)

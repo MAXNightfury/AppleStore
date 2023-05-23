@@ -19,5 +19,6 @@ public class ProductVO {
     private Date productDeleteDate;
     private String productImage;
     private int productCount;
+    private int totalOrderCount;
 
 }
