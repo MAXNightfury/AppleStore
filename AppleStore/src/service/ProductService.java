@@ -17,21 +17,22 @@ public class ProductService implements IProductService {
     public void insertProduct() {
         productVO = new ProductVO();
         System.out.println("[새로운 상품의 정보를 입력하세요.]");
-        System.out.print("상품 이름: ");
+        System.out.print("상품 이름 > ");
         productVO.setProductName(scanner.nextLine());
         ArrayList<ProductCategoryVO> productCategoryList = new ArrayList<>();
         productCategoryList = new ProductCategoryDAO().selectAllProductCategory();
         for (ProductCategoryVO productCategory : productCategoryList) {
             System.out.print(productCategory.getCategoryId() + "." + productCategory.getCategoryName() + " |");
         }
-        System.out.print("상품의 카테고리: ");
+        System.out.println();
+        System.out.print("상품의 카테고리 > ");
         productVO.setCategoryId(scanner.nextInt());
-        System.out.print("상품 가격: ");
+        System.out.print("상품 가격 > ");
         productVO.setProductPrice(scanner.nextInt());
         scanner.nextLine();
-        System.out.print("상품 이미지: ");
+        System.out.print("상품 이미지 > ");
         productVO.setProductImage(scanner.nextLine());
-        System.out.print("상품의 개수: ");
+        System.out.print("상품의 개수 > ");
         productVO.setProductCount(scanner.nextInt());
         int resultCount = productDAO.insertProduct(productVO);
         System.out.println(resultCount + "개의 상품이 추가되었습니다.");
@@ -121,12 +122,12 @@ public class ProductService implements IProductService {
     @Override
     public void updateProduct() {
         ProductVO productVO = new ProductVO();
-        System.out.print("수정할 상품의 ID : ");
+        System.out.print("수정할 상품의 ID > ");
         int updateProductId = scanner.nextInt();
         scanner.nextLine();
         productVO.setProductId(updateProductId);
 
-        System.out.print("상품 이름 : ");
+        System.out.print("상품 이름 > ");
         String productName = scanner.nextLine();
         productVO.setProductName(productName);
         ArrayList<ProductCategoryVO> productCategoryList = new ArrayList<>();
@@ -137,13 +138,16 @@ public class ProductService implements IProductService {
         }
         System.out.println();
         System.out.println("---------------------------------------------------------------------");
-        System.out.print("상품의 카테고리 : ");
+        System.out.print("상품의 카테고리 > ");
         int categoryId = scanner.nextInt();
         scanner.nextLine();
         productVO.setCategoryId(categoryId);
-        System.out.print("상품 가격 : ");
+        System.out.print("상품 가격 > ");
         int productPrice = scanner.nextInt();
         scanner.nextLine();
+        int productCount= scanner.nextInt();
+        scanner.nextLine();
+        productVO.setProductCount(productCount);
         productVO.setProductPrice(productPrice);
         int updateCount = productDAO.updateProduct(productVO);
         System.out.println(updateCount + "개의 상품이 수정되었습니다.");
@@ -153,7 +157,7 @@ public class ProductService implements IProductService {
     @Override
     public void deleteProduct() {
         ProductVO productVO = new ProductVO();
-        System.out.print("삭제할 상품의 ID : ");
+        System.out.print("삭제할 상품의 ID > ");
         int deleteProductId = scanner.nextInt();
         scanner.nextLine();
         productVO.setProductId(deleteProductId);

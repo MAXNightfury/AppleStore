@@ -40,8 +40,9 @@ public class ProductDAO implements IProductDAO {
         }
         return rowCount;
     }
+
     @Override
-    public ProductVO selectProductByBasket(ProductVO productVO) { //  음수인지 아닌지 출력
+    public ProductVO selectProductByBasket(ProductVO productVO) {
         String sql = "select product_id, product_count  from product where product_id=?";
         Connection connection = null;
         PreparedStatement pstmt = null;
@@ -262,6 +263,7 @@ public class ProductDAO implements IProductDAO {
         String sql = "update product set " +
                 "product_name = ?, " +
                 "category_id = ?, " +
+                "product_count = ?, " +
                 "product_price = ?, " +
                 "product_update_date = systimestamp " +
                 "where product_id = ?";
@@ -275,7 +277,8 @@ public class ProductDAO implements IProductDAO {
             pstmt.setString(1, productVO.getProductName());
             pstmt.setInt(2, productVO.getCategoryId());
             pstmt.setInt(3, productVO.getProductPrice());
-            pstmt.setInt(4, productVO.getProductId());
+            pstmt.setInt(4, productVO.getProductCount());
+            pstmt.setInt(5, productVO.getProductId());
             rowCount = pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException();
@@ -327,9 +330,9 @@ public class ProductDAO implements IProductDAO {
         try {
             connection = AppleStoreDataSource.getConnection();
             pstmt = connection.prepareStatement(sql);
-           int basketId= basketVO.getBasketId();
-           System.out.println(basketId);
-            pstmt.setInt(1,basketId);
+            int basketId = basketVO.getBasketId();
+            System.out.println(basketId);
+            pstmt.setInt(1, basketId);
             pstmt.setInt(2, basketId);
             rowCount = pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -342,7 +345,7 @@ public class ProductDAO implements IProductDAO {
                 }
             AppleStoreDataSource.closeConnection(connection);
         }
-        System.out.println("rowCount "+rowCount);
+        System.out.println("rowCount " + rowCount);
         return rowCount;
     }
 

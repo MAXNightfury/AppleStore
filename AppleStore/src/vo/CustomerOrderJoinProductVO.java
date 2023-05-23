@@ -13,6 +13,7 @@ public class CustomerOrderJoinProductVO {
 
     private int orderBundleId;
     private int orderId;
+    private String customerId;
     private Date orderInputDate;
     private String productName;
     private int orderProductCount;

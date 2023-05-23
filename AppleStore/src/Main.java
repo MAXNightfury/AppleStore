@@ -136,6 +136,11 @@ public class Main {
 
     // customerOrder end -------------------------------------------
     //product -----------------------------------
+    public static void insertProduct(){
+        ProductService productService = new ProductService();
+        productService.insertProduct();
+    }
+
     public static void  selectCategoryProduct(){
         ProductService productService = new ProductService();
         ProductVO productVO = new ProductVO();
@@ -151,7 +156,7 @@ public class Main {
 //        insertBasket();
 //        deleteBasket();
 //        deleteAllBaskets();
-        selectPopularProduct();
+        insertProduct();
     }
 
 }

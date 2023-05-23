@@ -1,14 +1,16 @@
 package src.service;
 
 import src.dao.BasketDAO;
+import src.dao.ProductDAO;
 import src.vo.BasketVO;
 import src.vo.CustomerVO;
+import src.vo.ProductVO;
 
 import java.util.Scanner;
 
 public class BasketService implements IBasketService {
     Scanner scanner = new Scanner(System.in);
-    static BasketDAO basketDAO = new BasketDAO(); //TODO static으로  올려 놓는게 맞나..? user id 는 이렇게 갖고 있어야 하는게 맞나?
+    static BasketDAO basketDAO = new BasketDAO();
 
     @Override
     public void insertBasket(CustomerVO customerVO) {
@@ -21,16 +23,23 @@ public class BasketService implements IBasketService {
         scanner.nextLine();
         System.out.println();
 
-        BasketVO basketVO = new BasketVO();
-        basketVO.setProductId(productId);
-        basketVO.setBasketProductCount(productCount);
-
-        int rowCount = basketDAO.insertBasket(customerVO, basketVO);
-
-        if (rowCount == 0) {
-            System.out.println("장바구니 추가에 실패했습니다. 관리자 문의 요망 ");
-        } else {
-            System.out.println("장바구니 추가에 성공했습니다.");
+        // 재고 확인
+        ProductVO productVO =new ProductVO();
+        ProductDAO productDAO=new ProductDAO();
+        productVO.setProductId(productId);
+        productVO=productDAO.selectProductByBasket(productVO);
+        if(productVO.getProductCount() - productCount < 0) {
+            System.out.println("상품재고가 부족합니다.");
+        }else{
+            BasketVO basketVO = new BasketVO();
+            basketVO.setProductId(productId);
+            basketVO.setBasketProductCount(productCount);
+            int rowCount = basketDAO.insertBasket(customerVO, basketVO);
+            if (rowCount == 0) {
+                System.out.println("장바구니 추가에 실패했습니다. 관리자 문의 요망 ");
+            } else {
+                System.out.println("장바구니 추가에 성공했습니다.");
+            }
         }
     }
 

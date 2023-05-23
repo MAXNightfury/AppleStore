@@ -50,7 +50,7 @@ public class CustomerDAO implements ICustomerDAO {
     @Override
     public int customerJoin(CustomerVO customerVO) {
         int count = 0;
-        String sql = "insert into customer (customer_id, customer_password, customer_name, customer_phone_number, customer_address, customer_born_date, customer_sex,customer_join_date) " +
+        String sql = "insert into customer (customer_id, customer_password, customer_name, customer_phone_number, customer_address, customer_born_date, customer_sex,customer_input_date) " +
                 "values(?,?, ?, ?, ?, ?, ?, systimestamp)";
 
         Connection connection = null;
