@@ -23,7 +23,7 @@ public class AppleStoreDataSource {
 			dataSource.setPassword(PASSWORD);  
 			dataSource.setInitialSize(10);
 			dataSource.setMaxTotal(10);
-			System.out.println("DataSource created");
+//			System.out.println("DataSource created");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

@@ -13,7 +13,7 @@ public interface ICustomerOrderDAO {
     public ArrayList<CustomerOrderJoinProductVO> selectCustomerOrder(CustomerVO customerVO);
 
     public int deleteCustomerOrder(CustomerOrderVO customerOrderVO);
-
+    public int updateOrderStatusId(CustomerOrderVO customerOrderVO);
     public ArrayList<CustomerOrderJoinProductVO> selectCustomerOrderByCustomerIdCanDelete(CustomerVO customerVO);
 
     public ArrayList<CustomerOrderJoinProductVO> selectCustomerOrderIdByBundleIdCanDelete(CustomerOrderVO customerOrderVO);

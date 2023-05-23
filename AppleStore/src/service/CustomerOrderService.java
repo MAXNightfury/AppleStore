@@ -37,7 +37,7 @@ public class CustomerOrderService implements ICustomerOrderService {
             productVO = productDAO.selectProductByBasket(productVO);
             if (productVO.getProductCount() - basketProductCount < 0) {
                 // 시스템 종료 재고 부족
-                System.out.println("상품재고가 부족합니다."); //TODO 어떤 상품?
+                System.out.println("상품재고가 부족합니다.");
                 System.exit(0);
             } else {
                 // 위 basketVO에는 선택한 basket의 모든 정보가 있으니까 저걸 basketId 배열에 받은 숫자만큼 insert 해
@@ -49,7 +49,7 @@ public class CustomerOrderService implements ICustomerOrderService {
             }
         }
         if (count != 0) {
-            System.out.println(count + "개 주문에 성공했습니다."); //TODO 사실 basketId 개수니까 뭐라고 해야하지? 이거 다시봐 틀려
+            System.out.println("주문에 성공했습니다.");
             for (int i = 0; i < basketIdStringArr.length; i++) {
                 BasketVO basketVO = new BasketVO();
                 basketVO.setBasketId(Integer.parseInt(basketIdStringArr[i]));
@@ -73,23 +73,32 @@ public class CustomerOrderService implements ICustomerOrderService {
 
         List<Integer> orderIdArr = new ArrayList<Integer>(orderIdArrSet);
 
-        for (int i = 0; i < orderIdArr.size(); i++) {
-            int bundleId = orderIdArr.get(i);
-            System.out.println();
-            System.out.println();
-            System.out.print("주문번호: " + bundleId + "  ");
-            System.out.println("주문시각: " + orderArr.get(i).getOrderInputDate());
-            System.out.printf("%5s | %3s | %3s", "제품이름", "개수", "총가격\n");
-            System.out.println("-------------------------");
-            List<CustomerOrderJoinProductVO> cojpLists = orderBybundleId.get(bundleId);
+        if (orderIdArr.size() == 0) {
+            System.out.println("주문기록이 없습니다.");
+            System.out.println("시스템을 종료합니다.");
+            System.exit(0);
+        } else {
+            for (int i = 0; i < orderIdArr.size(); i++) {
+                int bundleId = orderIdArr.get(i);
+                System.out.println();
+                System.out.println();
+                System.out.print("주문번호: " + bundleId + "  ");
+                System.out.print("주문상태: " + orderArr.get(i).getOrderStatusId() + "  ");
+                System.out.println("주문시각: " + orderArr.get(i).getOrderInputDate());
 
-            for (int j = 0; j < cojpLists.size(); j++) {
-                String productName = cojpLists.get(j).getProductName();
-                int productCount = cojpLists.get(j).getOrderProductCount();
-                int productSumPrice = cojpLists.get(j).getProductPrice();
-                System.out.printf("%5s | %3s | %5s\n", productName, productCount, productSumPrice);
+                System.out.printf("%5s | %3s | %3s | %3s", "제품이름", "개수", "총가격\n");
+                System.out.println("-------------------------");
+                List<CustomerOrderJoinProductVO> cojpLists = orderBybundleId.get(bundleId);
 
-            } //TODO 주문 기록이 없으면 없다고 말해줘
+                for (int j = 0; j < cojpLists.size(); j++) {
+                    String productName = cojpLists.get(j).getProductName();
+                    int productCount = cojpLists.get(j).getOrderProductCount();
+                    int productSumPrice = cojpLists.get(j).getProductPrice();
+
+                    System.out.printf("%5s | %3s | %5s\n", productName, productCount, productSumPrice);
+
+                }
+            }
         }
     }
 
@@ -127,6 +136,44 @@ public class CustomerOrderService implements ICustomerOrderService {
         }
     }
 
+    public void updateOrderStatusId() {
+//  주문 상태 바꾸삼
+        CustomerOrderVO customerOrderVO = new CustomerOrderVO();
+        System.out.print("주문상태를 변경할 주문ID를 입력해주세요 >");
+        System.out.println();
+        int orderId = scanner.nextInt();
+        scanner.nextLine();
+        customerOrderVO.setOrderId(orderId);
+        System.out.print("변경할 주문 상태의 번호를 입력해 주세요 >");
+        System.out.println();
+        System.out.println("| 1.결제대기 | 2.결제완료 | 3.배송준비 | 4.배송중 | 5.배송완료 | 6.주문취소 |");
+        int statusId = scanner.nextInt();
+        scanner.nextLine();
+        String statusIdString = null;
+        if (statusId == 1) {
+            statusIdString = "결제대기";
+        } else if (statusId == 2) {
+            statusIdString = "결제완료";
+        } else if (statusId == 3) {
+            statusIdString = "배송준비";
+        } else if (statusId == 4) {
+            statusIdString = "배송중";
+        } else if (statusId == 5) {
+            statusIdString = "배송완료";
+        } else if (statusId == 5) {
+            statusIdString = "주문취소";
+        } else {
+            System.out.println("배송 상태를 잘못 입력하셨습니다.");
+            System.out.println("시스템을 종료합니다?");
+            System.exit(0);
+        }
+        CustomerOrderDAO customerOrderDAO = new CustomerOrderDAO();
+        if (statusIdString != null) {
+            customerOrderVO.setOrderStatusId(statusIdString);
+            customerOrderDAO.updateOrderStatusId(customerOrderVO);
+        }
+    }
+
     @Override
     public void deleteCustomerOrder(CustomerVO customerVO) {
         // order status id 가 결제대기 결제완료 일때만 실행해
@@ -159,12 +206,12 @@ public class CustomerOrderService implements ICustomerOrderService {
             count = customerOrderDAO.deleteCustomerOrder(customerOrderVO);
 
             if (count != 0) {
-                count = count + count; // TODO 이거도 숫자 맞나 봐봐
+                System.out.println("주문을 취소했습니다.");
             } else {
                 System.out.println("주문취소 실패 관리자 문의 요망");
             }
         }
-        System.out.println(count + " 개 주문을 취소했습니다.");
+
 
 
     }
