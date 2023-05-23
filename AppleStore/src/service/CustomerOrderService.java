@@ -8,18 +8,16 @@ import src.vo.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CustomerOrderService {
+public class CustomerOrderService implements ICustomerOrderService {
     static Scanner scanner = new Scanner(System.in);
-    static CustomerOrderDAO customerDAO = new CustomerOrderDAO(); //TODO static으로  올려 놓는게 맞나..?
     static BasketService basketService = new BasketService();
 
+    @Override
     public void insertCustomerOrder(CustomerVO customerVO) {
-
-        String basketIdString;
         int count = 0;
         System.out.print("주문할 장바구니 ID 를 입력하세요> ");
         System.out.println();
-        basketIdString = scanner.nextLine();
+        String basketIdString = scanner.nextLine();
         String[] basketIdStringArr = basketIdString.split(" ");
         int orderBundleId = Integer.parseInt(basketIdStringArr[0]);
 
@@ -35,6 +33,7 @@ public class CustomerOrderService {
             ProductVO productVO = new ProductVO();
             productVO.setProductId(basketProductId);
             ProductDAO productDAO = new ProductDAO();
+            //customer service에서 productDAO에 바로 접근해도 상관 없음
             productVO = productDAO.selectProductByBasket(productVO);
             if (productVO.getProductCount() - basketProductCount < 0) {
                 // 시스템 종료 재고 부족
@@ -47,7 +46,6 @@ public class CustomerOrderService {
                 count++;
                 // 양수면 그만큼 빼
                 productDAO.updateProductCountDecrease(basketVO);
-//                System.out.println("rowCount "+rowCount);
             }
         }
         if (count != 0) {
@@ -57,13 +55,12 @@ public class CustomerOrderService {
                 basketVO.setBasketId(Integer.parseInt(basketIdStringArr[i]));
                 BasketDAO basketDAO = new BasketDAO();
                 basketDAO.deleteBasket(basketVO); // 주문 완료 되면 장바구니 찐삭제
-                //product.productCount에서 주문한거만큼 count 내려
-
             }
         }
 
     }
 
+    @Override
     public void selectCustomerOrder(CustomerVO customerVO) {
         ArrayList<CustomerOrderJoinProductVO> orderArr = new ArrayList<CustomerOrderJoinProductVO>();
         CustomerOrderDAO customerOrderDAO = new CustomerOrderDAO();
@@ -92,10 +89,11 @@ public class CustomerOrderService {
                 int productSumPrice = cojpLists.get(j).getProductPrice();
                 System.out.printf("%5s | %3s | %5s\n", productName, productCount, productSumPrice);
 
-            }
+            } //TODO 주문 기록이 없으면 없다고 말해줘
         }
     }
 
+    @Override
     public void selectCustomerOrderCanDelete(CustomerVO customerVO) {
         CustomerOrderDAO customerOrderDAO = new CustomerOrderDAO();
         ArrayList<CustomerOrderJoinProductVO> orderArr = new ArrayList<CustomerOrderJoinProductVO>();
@@ -129,9 +127,9 @@ public class CustomerOrderService {
         }
     }
 
+    @Override
     public void deleteCustomerOrder(CustomerVO customerVO) {
-        // 니 뭐 삭제 할건데 customer_order 에서 order_id 를 가져와 야지
-        // 그리고 order status id 가 결제대기 결제완료 일때만 실행해
+        // order status id 가 결제대기 결제완료 일때만 실행해
         String orderBundleIdString;
         int count = 0;
         CustomerOrderVO customerOrderVO = new CustomerOrderVO();
@@ -153,14 +151,12 @@ public class CustomerOrderService {
             for (int a = 0; a < orderIdArr.size(); a++) {
                 orderIdArr2.add(orderIdArr.get(i).getOrderId());
             }
-            for (int j = 0; j<orderIdArr2.size(); j++){
+            for (int j = 0; j < orderIdArr2.size(); j++) {
                 // order_id increase product count
                 customerOrderVO.setOrderId(orderIdArr2.get(i));
-                int a = orderIdArr2.get(i);
-                System.out.println("a: "+a);
                 productDAO.updateProductCountIncrease(customerOrderVO);
             }
-                count = customerOrderDAO.deleteCustomerOrder(customerOrderVO);
+            count = customerOrderDAO.deleteCustomerOrder(customerOrderVO);
 
             if (count != 0) {
                 count = count + count; // TODO 이거도 숫자 맞나 봐봐

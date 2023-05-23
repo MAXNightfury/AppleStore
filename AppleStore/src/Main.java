@@ -1,10 +1,9 @@
 package src;
 
-import src.service.BasketService;
-import src.service.CustomerOrderService;
-import src.service.CustomerService;
-import src.service.ProductCategoryService;
+import src.service.*;
 import src.vo.CustomerVO;
+import src.vo.ProductVO;
+
 import java.util.Scanner;
 
 public class Main {
@@ -136,10 +135,23 @@ public class Main {
     }
 
     // customerOrder end -------------------------------------------
+    //product -----------------------------------
+    public static void  selectCategoryProduct(){
+        ProductService productService = new ProductService();
+        ProductVO productVO = new ProductVO();
+        productVO.setCategoryId(1);
+        productService.selectCategoryProduct(productVO);
+    }
+    public static void  selectPopularProduct(){
+        ProductService productService = new ProductService();
+        productService.selectPopularProduct();
+    }
+    //product end-----------------------------
     public static void main(String[] args) {
 //        insertBasket();
 //        deleteBasket();
 //        deleteAllBaskets();
+        selectPopularProduct();
     }
 
 }

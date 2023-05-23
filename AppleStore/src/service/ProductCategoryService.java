@@ -1,26 +1,28 @@
 package src.service;
 
+import src.dao.IProductCategoryDAO;
 import src.dao.ProductCategoryDAO;
 import src.vo.ProductCategoryVO;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ProductCategoryService {
+public class ProductCategoryService implements IProductCategoryService {
     static Scanner scanner = new Scanner(System.in);
-    static ProductCategoryDAO productCategoryDAO = new ProductCategoryDAO(); //TODO 이게 맞냐고
+    static ProductCategoryDAO productCategoryDAO = new ProductCategoryDAO();
 
+    @Override
     public void insertProductCategory() {
-        String categoryName;
         System.out.println("");
         System.out.println("카테고리 이름을 입력해주세요 >");
-        categoryName = scanner.nextLine();
+        String categoryName = scanner.nextLine();
         ProductCategoryVO productCategoryVO = new ProductCategoryVO();
         productCategoryVO.setCategoryName(categoryName);
         productCategoryDAO.insertProductCategory(productCategoryVO);
 
     }
 
+    @Override
     public void selectAllProductCategory() {
         ArrayList<ProductCategoryVO> productCategories = productCategoryDAO.selectAllProductCategory();
         ArrayList<String> columns = productCategoryDAO.getAllColumnNamesProductCategory();
@@ -31,17 +33,17 @@ public class ProductCategoryService {
 
     }
 
+    @Override
     public void updateProductCategory() {
         int count = 0;
         int categoryId;
-        String categoryName;
         System.out.print("수정할 카테고리의 아이디를 입력해주세요 >");
         System.out.println();
         categoryId = scanner.nextInt();
         scanner.nextLine();
         System.out.print("바뀔 카테고리 이름을 입력해주세요 >");
         System.out.println();
-        categoryName = scanner.nextLine();
+        String categoryName = scanner.nextLine();
         ProductCategoryVO productCategoryVO = new ProductCategoryVO();
         productCategoryVO.setCategoryId(categoryId);
         productCategoryVO.setCategoryName(categoryName);
@@ -54,13 +56,13 @@ public class ProductCategoryService {
         }
     }
 
+    @Override
     public void deleteProductCategory() {
         int count = 0;
-        int categoryId;
 
         System.out.print("삭제할 카테고리의 아이디를 입력해주세요 >");
         System.out.println();
-        categoryId = scanner.nextInt();
+        int categoryId = scanner.nextInt();
         scanner.nextLine();
         ProductCategoryVO productCategoryVO = new ProductCategoryVO();
         productCategoryVO.setCategoryId(categoryId);

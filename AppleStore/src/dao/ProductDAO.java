@@ -4,12 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-import src.vo.AppleStoreDataSource;
-import src.vo.BasketVO;
-import src.vo.CustomerOrderVO;
-import src.vo.ProductVO;
+import src.vo.*;
 
 public class ProductDAO implements IProductDAO {
     public static Scanner scanner = new Scanner(System.in);
@@ -42,7 +40,7 @@ public class ProductDAO implements IProductDAO {
         }
         return rowCount;
     }
-
+    @Override
     public ProductVO selectProductByBasket(ProductVO productVO) { //  음수인지 아닌지 출력
         String sql = "select product_id, product_count  from product where product_id=?";
         Connection connection = null;
@@ -60,7 +58,7 @@ public class ProductDAO implements IProductDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) // 연 반대 순서로 닫는다.
+            if (rs != null)
                 try {
                     rs.close();
                 } catch (Exception e) {
@@ -76,23 +74,21 @@ public class ProductDAO implements IProductDAO {
     }
 
     @Override
-    public void selectCategoryProduct(int categoryId) {
+    public ArrayList<ProductVO> selectCategoryProduct(ProductVO productVO) {
         String sql = "select product_id, category_id, product_name, product_price, product_input_date, product_image , product_count "
                 + "from product "
                 + "where category_id=? and product_delete_date is null";
-        ProductVO productVO = null;
+        // 어래이에 담아야지
+        ArrayList<ProductVO> categoryProductArr = new ArrayList<ProductVO>();
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         try {
             connection = AppleStoreDataSource.getConnection();
             pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, categoryId);
+            pstmt.setInt(1, productVO.getCategoryId());
             rs = pstmt.executeQuery();
-            System.out.println("---------------------------------------");
-            System.out.printf("%10s\t%14s\t%7s\t%7s", "제품ID", "제품이름", "제품가격", "남은수량");
-            System.out.println();
-            System.out.println("---------------------------------------");
+
             while (rs.next()) {
                 productVO = new ProductVO();
                 productVO.setProductId(rs.getInt("product_id"));
@@ -102,12 +98,12 @@ public class ProductDAO implements IProductDAO {
                 productVO.setProductInputDate(rs.getDate("product_input_date"));
                 productVO.setProductImage(rs.getString("product_image"));
                 productVO.setProductCount(rs.getInt("product_count"));
-                System.out.println(productVO);
+                categoryProductArr.add(productVO);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) // 연 반대 순서로 닫는다.
+            if (rs != null)
                 try {
                     rs.close();
                 } catch (Exception e) {
@@ -119,10 +115,11 @@ public class ProductDAO implements IProductDAO {
                 }
             AppleStoreDataSource.closeConnection(connection);
         }
+        return categoryProductArr;
     }
 
     @Override
-    public void selectPopularProduct() {
+    public ArrayList<ProductVO> selectPopularProduct() { // TODO 해수 테스트 테이블 밀고 해봐
         String sql = "select p.product_id, p.category_id, p.product_name, p.product_price, p.product_count, " +
                 "(select sum(order_product_count) from customer_order group by customer_order.product_id) as sum " +
                 "from product p " +
@@ -130,6 +127,7 @@ public class ProductDAO implements IProductDAO {
                 "where p.product_delete_date is null " +
                 "order by sum";
 
+        ArrayList<ProductVO> popularProductArr = new ArrayList<ProductVO>();
         ProductVO productVO = null;
         Connection connection = null;
         PreparedStatement pstmt = null;
@@ -139,10 +137,7 @@ public class ProductDAO implements IProductDAO {
             pstmt = connection.prepareStatement(sql);
             rs = pstmt.executeQuery();
             int count = 0;
-            System.out.println("------------------------------------------------");
-            System.out.printf("%10s\t%14s\t%7s\t%7s\t%7s", "제품ID", "제품이름", "제품가격", "남은수량", "주문수량");
-            System.out.println();
-            System.out.println("------------------------------------------------");
+
             while (rs.next()) {
                 productVO = new ProductVO();
                 productVO.setProductId(rs.getInt("product_id"));
@@ -150,15 +145,14 @@ public class ProductDAO implements IProductDAO {
                 productVO.setProductName(rs.getString("product_name"));
                 productVO.setProductPrice(rs.getInt("product_price"));
                 productVO.setProductCount(rs.getInt("product_count"));
-                count = rs.getInt("sum"); //총주문량
-                System.out.print(productVO);
-                System.out.printf("\t%7d", count);
-                System.out.println();
+                productVO.setTotalOrderCount(rs.getInt("sum"));
+                popularProductArr.add(productVO);
+//
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) // 연 반대 순서로 닫는다.
+            if (rs != null)
                 try {
                     rs.close();
                 } catch (Exception e) {
@@ -170,16 +164,16 @@ public class ProductDAO implements IProductDAO {
                 }
             AppleStoreDataSource.closeConnection(connection);
         }
-
-
+        return popularProductArr;
     }
 
     @Override
-    public void selectlowPriceProduct() {
+    public ArrayList<ProductVO> selectLowPriceProduct() {
         String sql = "select product_id, category_id, product_name, product_price, product_input_date, product_image , product_count "
                 + "from product "
                 + "where product_delete_date is null "
                 + "order by product_price";
+        ArrayList<ProductVO> lowPriceProductArr = new ArrayList<ProductVO>();
         ProductVO productVO = null;
         Connection connection = null;
         PreparedStatement pstmt = null;
@@ -188,10 +182,7 @@ public class ProductDAO implements IProductDAO {
             connection = AppleStoreDataSource.getConnection();
             pstmt = connection.prepareStatement(sql);
             rs = pstmt.executeQuery();
-            System.out.println("---------------------------------------");
-            System.out.printf("%10s\t%14s\t%7s\t%7s", "제품ID", "제품이름", "제품가격", "남은수량");
-            System.out.println();
-            System.out.println("---------------------------------------");
+
             while (rs.next()) {
                 productVO = new ProductVO();
                 productVO.setProductId(rs.getInt("product_id"));
@@ -201,12 +192,12 @@ public class ProductDAO implements IProductDAO {
                 productVO.setProductInputDate(rs.getDate("product_input_date"));
                 productVO.setProductImage(rs.getString("product_image"));
                 productVO.setProductCount(rs.getInt("product_count"));
-                System.out.println(productVO);
+                lowPriceProductArr.add(productVO);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) // 연 반대 순서로 닫는다.
+            if (rs != null)
                 try {
                     rs.close();
                 } catch (Exception e) {
@@ -218,16 +209,16 @@ public class ProductDAO implements IProductDAO {
                 }
             AppleStoreDataSource.closeConnection(connection);
         }
-
-
+        return lowPriceProductArr;
     }
 
     @Override
-    public void selectHighPriceProduct() {
+    public ArrayList<ProductVO> selectHighPriceProduct() {
         String sql = "select product_id, category_id, product_name, product_price, product_input_date, product_image , product_count "
                 + "from product "
                 + "where product_delete_date is null "
                 + "order by product_price desc";
+        ArrayList<ProductVO> highPriceProductArr = new ArrayList<ProductVO>();
         ProductVO productVO = null;
         Connection connection = null;
         PreparedStatement pstmt = null;
@@ -236,10 +227,7 @@ public class ProductDAO implements IProductDAO {
             connection = AppleStoreDataSource.getConnection();
             pstmt = connection.prepareStatement(sql);
             rs = pstmt.executeQuery();
-            System.out.println("---------------------------------------");
-            System.out.printf("%10s\t%14s\t%7s\t%7s", "제품ID", "제품이름", "제품가격", "남은수량");
-            System.out.println();
-            System.out.println("---------------------------------------");
+
             while (rs.next()) {
                 productVO = new ProductVO();
                 productVO.setProductId(rs.getInt("product_id"));
@@ -249,12 +237,12 @@ public class ProductDAO implements IProductDAO {
                 productVO.setProductInputDate(rs.getDate("product_input_date"));
                 productVO.setProductImage(rs.getString("product_image"));
                 productVO.setProductCount(rs.getInt("product_count"));
-                System.out.println(productVO);
+                highPriceProductArr.add(productVO);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) // 연 반대 순서로 닫는다.
+            if (rs != null)
                 try {
                     rs.close();
                 } catch (Exception e) {
@@ -266,22 +254,11 @@ public class ProductDAO implements IProductDAO {
                 }
             AppleStoreDataSource.closeConnection(connection);
         }
-
-
+        return highPriceProductArr;
     }
 
     @Override
     public int updateProduct(ProductVO productVO) {
-        System.out.print("상품 이름 : ");
-        String productName = scanner.nextLine();
-        System.out.println("1.MAC | 2.IPhone | 3.IPad | 4.Air Pods | 5.Apple Watch| 6.Accessories");
-        System.out.print("상품의 카테고리 : ");
-        int categoryId = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("상품 가격 : ");
-        int productPrice = scanner.nextInt();
-        scanner.nextLine();
-
         String sql = "update product set " +
                 "product_name = ?, " +
                 "category_id = ?, " +
@@ -295,13 +272,12 @@ public class ProductDAO implements IProductDAO {
         try {
             connection = AppleStoreDataSource.getConnection();
             pstmt = connection.prepareStatement(sql);
-            pstmt.setString(1, productName);
-            pstmt.setInt(2, categoryId);
-            pstmt.setInt(3, productPrice);
+            pstmt.setString(1, productVO.getProductName());
+            pstmt.setInt(2, productVO.getCategoryId());
+            pstmt.setInt(3, productVO.getProductPrice());
             pstmt.setInt(4, productVO.getProductId());
             rowCount = pstmt.executeUpdate();
         } catch (SQLException e) {
-            // runtimeException예외 던져라
             throw new RuntimeException();
         } finally {
             if (pstmt != null)
@@ -315,7 +291,7 @@ public class ProductDAO implements IProductDAO {
     }
 
     @Override
-    public int updateProductCountIncrease(CustomerOrderVO customerOrderVO) { // TODO 수정
+    public int updateProductCountIncrease(CustomerOrderVO customerOrderVO) {
         String sql = "update product set product_count = product_count+( select order_product_count from customer_order where order_id= ? ) " +
                 "where product_id=( select product_id from customer_order where order_id= ? )";
         int rowCount = 0;
@@ -357,7 +333,6 @@ public class ProductDAO implements IProductDAO {
             pstmt.setInt(2, basketId);
             rowCount = pstmt.executeUpdate();
         } catch (SQLException e) {
-            // runtimeException예외 던져라
             throw new RuntimeException();
         } finally {
             if (pstmt != null)
@@ -395,8 +370,6 @@ public class ProductDAO implements IProductDAO {
         }
         return rowCount;
     }
-
-
 }
 
 
