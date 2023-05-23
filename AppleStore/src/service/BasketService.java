@@ -3,13 +3,15 @@ package src.service;
 import src.dao.BasketDAO;
 import src.vo.BasketVO;
 import src.vo.CustomerVO;
+import src.vo.IBasketService;
 
 import java.util.Scanner;
 
-public class BasketService {
+public class BasketService implements IBasketService {
     Scanner scanner = new Scanner(System.in);
     static BasketDAO basketDAO = new BasketDAO(); //TODO static으로  올려 놓는게 맞나..? user id 는 이렇게 갖고 있어야 하는게 맞나?
 
+    @Override
     public void insertBasket(CustomerVO customerVO) {
         System.out.print("추가할 상품 ID를 입력해주세요 > ");
         int productId = scanner.nextInt();
@@ -24,18 +26,28 @@ public class BasketService {
         basketVO.setProductId(productId);
         basketVO.setBasketProductCount(productCount);
 
-        basketDAO.insertBasket(customerVO, basketVO);
+        int rowCount = basketDAO.insertBasket(customerVO, basketVO);
+
+        if (rowCount == 0) {
+            System.out.println("장바구니 추가에 실패했습니다. 관리자 문의 요망 ");
+        } else {
+            System.out.println("장바구니 추가에 성공했습니다.");
+        }
     }
 
+    @Override
     public void selectBaskets(CustomerVO customerVO) {
         basketDAO.selectBaskets(customerVO);
     }
 
+    @Override
     public BasketVO selectOneBasket(BasketVO basketVO) {
         // vo 에 basketId set 된 상태여야해
-        basketVO=basketDAO.selectOneBasket(basketVO);
+        basketVO = basketDAO.selectOneBasket(basketVO);
         return basketVO;
     }
+
+    @Override
     public void updateBasket() {
         System.out.print("수정할 ID를 입력해주세요 > ");
         int basketId = scanner.nextInt();
@@ -51,13 +63,36 @@ public class BasketService {
         basketDAO.updateBasket(basketVO);
     }
 
+    @Override
     public void deleteBasket() {
-        System.out.print("삭제할 ID를 입력해주세요 > ");
-        int basketId = scanner.nextInt();
-        scanner.nextLine();
+        int count = 0;
+        String basketDelIdString;
+        System.out.print("삭제할 ID를 입력해주세요(스페이스로 구분) > ");
         System.out.println();
-        BasketVO basketVO = new BasketVO();
-        basketVO.setBasketId(basketId);
-        basketDAO.deleteBasket(basketVO);
+        basketDelIdString = scanner.nextLine();
+        String[] basketDelIdStringArr = basketDelIdString.split(" ");
+
+        for (int i = 0; i < basketDelIdStringArr.length; i++) {
+            BasketVO basketVO = new BasketVO();
+            basketVO.setBasketId(Integer.parseInt(basketDelIdStringArr[i]));
+            int rowcount = basketDAO.deleteBasket(basketVO);
+            count = count + rowcount;
+        }
+        if (count == basketDelIdStringArr.length) {
+            System.out.print(count + "개의 장바구니가 삭제되었습니다.");
+        } else {
+            System.out.print("장바구니 삭제에 실패했습니다. 관리자 문의 요망");
+        }
+    }
+
+    @Override
+    public void deleteAllBaskets(CustomerVO custmoerVO) {
+        System.out.println("장바구니의 모든 데이터를 삭제합니다.");
+        int count = basketDAO.deleteAllBaskets(custmoerVO);
+        if (count == 0) {
+            System.out.println("장바구니 전체 삭제에 실패했습니다. 관리자 문의 요망");
+        } else {
+            System.out.println("장바구니 전체삭제에 성공했습니다.");
+        }
     }
 }

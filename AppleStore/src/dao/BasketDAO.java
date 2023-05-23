@@ -3,13 +3,11 @@ package src.dao;
 import src.vo.AppleStoreDataSource;
 import src.vo.BasketVO;
 import src.vo.CustomerVO;
-import src.vo.ProductVO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class BasketDAO implements IBasketDAO {
 
@@ -27,7 +25,6 @@ public class BasketDAO implements IBasketDAO {
             pstmt.setInt(3, basketVO.getProductId());
             rowCount = pstmt.executeUpdate();
         } catch (SQLException e) {
-            // runtimeException예외를 던저라
             throw new RuntimeException(e);
         } finally {
             if (pstmt != null)
@@ -44,7 +41,6 @@ public class BasketDAO implements IBasketDAO {
     @Override
     public void selectBaskets(CustomerVO customerVO) {
         ResultSet rs = null;
-//        ArrayList<BasketVO> basketList = new ArrayList<BasketVO>();
         String sql = "select b.basket_id, b.basket_product_count, p.product_name, p.product_price "
                 + "from basket b "
                 + "left join product p "
@@ -69,13 +65,8 @@ public class BasketDAO implements IBasketDAO {
                 int basketProductCount = rs.getInt("basket_product_count");
                 System.out.printf("%3s\t%5s\t%5s\t%3s", basketId, productName, productPrice, basketProductCount);
                 System.out.println();
-//                BasketVO basketVO = new BasketVO();
-//                basketVO.setBasketId(rs.getInt("basket_id"));
-//                basketVO.setBasketProductCount(rs.getInt("basket_product_count"));
-//                basketList.add(basketVO);
             }
         } catch (SQLException e) {
-            // runtimeException예외를 던저라
             throw new RuntimeException(e);
         } finally {
             if (pstmt != null)
@@ -86,10 +77,10 @@ public class BasketDAO implements IBasketDAO {
                 }
             AppleStoreDataSource.closeConnection(connection);
         }
-
     }
 
-    public BasketVO selectOneBasket( BasketVO basketVO) { // basket_id 로 하나만 뽑을때
+    @Override
+    public BasketVO selectOneBasket(BasketVO basketVO) { // basket_id 로 하나만 뽑을때
         String sql = "select basket_id, basket_product_count, customer_id, product_id from basket where basket_id=?";
         Connection connection = null;
         PreparedStatement pstmt = null;
@@ -109,7 +100,7 @@ public class BasketDAO implements IBasketDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) // 연 반대 순서로 닫는다.
+            if (rs != null)
                 try {
                     rs.close();
                 } catch (Exception e) {
@@ -123,8 +114,6 @@ public class BasketDAO implements IBasketDAO {
         }
         return basketVO;
     }
-
-
 
     @Override
     public int updateBasket(BasketVO basketVO) {
@@ -140,7 +129,6 @@ public class BasketDAO implements IBasketDAO {
             pstmt.setInt(2, basketVO.getProductId());
             rowCount = pstmt.executeUpdate();
         } catch (SQLException e) {
-            // runtimeException예외를 던저라
             throw new RuntimeException(e);
         } finally {
             if (pstmt != null)
@@ -167,11 +155,33 @@ public class BasketDAO implements IBasketDAO {
             pstmt.setInt(1, basketVO.getBasketId());
             rowCount = pstmt.executeUpdate();
 
-            if (rowCount == 1) {
-                System.out.println("장바구니에서 삭제되었습니다.");
-            } else {
-                System.out.println(rowCount);
-            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (pstmt != null)
+                try {
+                    pstmt.close();
+                } catch (Exception e) {
+
+                }
+            AppleStoreDataSource.closeConnection(connection);
+        }
+        return rowCount;
+    }
+
+    @Override
+    public int deleteAllBaskets(CustomerVO custmoerVO) {
+        int rowCount = 0;
+        String sql = "delete from basket where customer_id=?";
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = AppleStoreDataSource.getConnection();
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, custmoerVO.getCustomerId());
+            rowCount = pstmt.executeUpdate();
+
         } catch (SQLException e) {
             // runtimeException예외를 던저라
             throw new RuntimeException(e);

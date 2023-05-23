@@ -1,15 +1,11 @@
 package src;
 
-import src.dao.CustomerDAO;
 import src.service.BasketService;
 import src.service.CustomerOrderService;
 import src.service.CustomerService;
 import src.service.ProductCategoryService;
 import src.vo.CustomerVO;
-
-import java.sql.Date;
 import java.util.Scanner;
-
 
 public class Main {
 
@@ -34,11 +30,6 @@ public class Main {
         customerVO.setCustomerId("test");
         customerService.customerUpdatePassword(customerVO);
     }
-
-//    public void checkCustomerPassword(){ 체크는 메인에서 안 해 서비스에서 해
-//        CustomerService customerService =new CustomerService();
-//        customerService.checkCustomerPassword();
-//    }
 
     public void customerNameUpdate() {
         CustomerService customerService = new CustomerService();
@@ -115,6 +106,11 @@ public class Main {
         BasketService basketService = new BasketService();
         basketService.deleteBasket();
     }
+    public static void deleteAllBaskets() {
+        BasketService basketService = new BasketService();
+        customerVO.setCustomerId("test");
+        basketService.deleteAllBaskets(customerVO);
+    }
 
     // basket end ---------------------------------
 
@@ -141,7 +137,9 @@ public class Main {
 
     // customerOrder end -------------------------------------------
     public static void main(String[] args) {
-        deleteCustomerOrder();
+//        insertBasket();
+//        deleteBasket();
+//        deleteAllBaskets();
     }
 
 }
